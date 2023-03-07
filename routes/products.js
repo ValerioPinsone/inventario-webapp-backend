@@ -161,5 +161,51 @@ router.get('/setquantity/:id/:quantity', cors(), function(req, res, next) {
     })
 });
 
+//post product
+router.post('/', cors(), function(req, res, next) {
+    let product = req.body;
+    console.log(product);
+    connection.query('INSERT INTO product (product_name, product_desc, product_quantity) VALUES ("'+product.name+'", "'+product.description+'", '+product.quantity+')', (err, result, fields) => {
+    if (err) throw err;
+
+        console.log(result);
+        products = JSON.stringify(result);
+        products = JSON.parse(products);
+
+        res.json(products);
+
+    })
+});
+
+//update product
+router.put('/:id', cors(), function(req, res, next) {
+    let id = req.params.id;
+    let product = req.body;
+    console.log(product);
+    connection.query('UPDATE product SET product_name = "'+product.name+'", product_desc = "'+product.descriprion+'", product_quantity = '+product.quantity+' WHERE product_id = '+id, (err, result, fields) => {
+    if (err) throw err;
+
+        console.log(result);
+        products = JSON.stringify(result);
+        products = JSON.parse(products);
+        
+        res.json(products);
+    })
+});
+
+//delete product
+router.delete('/:id', cors(), function(req, res, next) {
+    let id = req.params.id;
+    connection.query('DELETE FROM product WHERE product_id = '+id, (err, result, fields) => {
+    if (err) throw err;
+
+        console.log(result);
+        products = JSON.stringify(result);
+        products = JSON.parse(products);
+
+        res.json(products);
+    })
+});
+
 
 module.exports = router;
